@@ -1,6 +1,6 @@
 #pragma once
 #include "WorldTransform.h"
-#include "Model.h"jh,m 
+#include "Model.h"
 ///自キャラ 
 class Player{
 public:
@@ -18,4 +18,4 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 	ViewProjection* viewProjection_=nullptr;
-};	
+};
