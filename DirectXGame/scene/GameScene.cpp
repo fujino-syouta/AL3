@@ -17,6 +17,7 @@ GameScene::~GameScene() {
 	worldTransformBlocks_.clear();
 
 	delete debugCamera_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -34,11 +35,12 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
-
 	// 自キャラの生成
 	player_ = new Player();
+	skydome_=new Skydome();
 	// 自キャラの初期化
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	skydome_->Initialize(model_,&viewProjection_);
 
 
 	// 要素数
@@ -70,6 +72,8 @@ void GameScene::Initialize() {
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280,720);
+	modelSkydome_=Model::CreateFromOBJ("skydeome",true);
+	
 }
 
 void GameScene::Update() {
@@ -98,6 +102,7 @@ void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
+	skydome_->Update();
 
 	// 縦横ブロック更新
 	for (std::vector<WorldTransform*> worldTransformBlockTate : worldTransformBlocks_) {
@@ -167,6 +172,6 @@ void GameScene::Draw() {
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
-
+	skydome_->Draw();
 #pragma endregion
 }

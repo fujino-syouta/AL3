@@ -9,7 +9,7 @@
 #include "WorldTransform.h"
 #include "Player.h"
 #include "DebugCamera.h"
-
+#include"Skydome.h"
 #include <vector>
 
 
@@ -49,7 +49,6 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
-
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
@@ -73,4 +72,6 @@ private: // メンバ変数
 	bool isDebugCameraActive_ = false;
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
+	Skydome*skydome_;
+	 Model* modelSkydome_=nullptr;
 };
