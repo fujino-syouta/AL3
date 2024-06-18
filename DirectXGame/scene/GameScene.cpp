@@ -72,8 +72,10 @@ void GameScene::Initialize() {
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280,720);
-	modelSkydome_=Model::CreateFromOBJ("skydeome",true);
+	modelSkydome_=Model::CreateFromOBJ("sphere",true);
 	
+	skydome_= new Skydome();
+	skydome_->Initialize(modelSkydome_,&viewProjection_);
 }
 
 void GameScene::Update() {
@@ -147,6 +149,7 @@ void GameScene::Draw() {
 //	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	// 自キャラの描画
 //	player_->Draw();
+	skydome_->Draw();
 
 	//縦横ブロック描画
 	for (std::vector<WorldTransform*> worldTransformBlockTate : worldTransformBlocks_) {
@@ -172,6 +175,6 @@ void GameScene::Draw() {
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
-	skydome_->Draw();
+	
 #pragma endregion
 }

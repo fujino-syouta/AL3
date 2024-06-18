@@ -1,6 +1,6 @@
-#include"GameScene.h"
-#include"Model.h"
-#include"WorldTransform.h"
+#include<ViewProjection.h>
+#include<Model.h>
+#include<WorldTransform.h>
 class Skydome
 {
 public:

@@ -1,4 +1,4 @@
-#include"Skydome.h"
+#include<Skydome.h>
 void Skydome::Initialize(Model*model,ViewProjection* viewProjection)
 {
 	model_=model;
