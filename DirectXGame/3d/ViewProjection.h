@@ -40,8 +40,7 @@ public:
 	Matrix4x4 matView;
 	// 射影行列
 	Matrix4x4 matProjection;
-
-	ViewProjection() = default;
+ViewProjection() = default;
 	~ViewProjection() = default;
 
 	/// <summary>
