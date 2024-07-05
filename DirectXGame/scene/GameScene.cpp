@@ -3,11 +3,12 @@
 #include "myMath.h"
 #include <cassert>
 
-GameScene::GameScene() {}
+GameScene::GameScene() { }
 
 GameScene::~GameScene() {
 	delete model_;
 
+	delete modelSkydome_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -17,7 +18,8 @@ GameScene::~GameScene() {
 	worldTransformBlocks_.clear();
 
 	delete debugCamera_;
-	delete modelSkydome_;
+	delete mapChipField_;
+	
 }
 
 void GameScene::Initialize() {
@@ -27,55 +29,62 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	// ファイル名を指定してテクスチャを読み込む
-	textureHandle_ = TextureManager::Load("cube.jpg");
+	textureHandle_ = TextureManager::Load("cube/cube.jpg");
 	// 3Dモデルの生成
 	model_ = Model::Create();
 	modelBlock_ = Model::Create();
+	modelSkydome_ = Model::CreateFromOBJ("sphere", true);
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
 	// 自キャラの生成
 	player_ = new Player();
-	skydome_=new Skydome();
 	// 自キャラの初期化
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
-	skydome_->Initialize(model_,&viewProjection_);
+	player_->Initialize(modelSkydome_, textureHandle_, &viewProjection_);
+
+	//skydome生成
+	skydome_ = new Skydome;
+
+	
+
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 
+//map
+	mapChipField_ = new MapChipField;
+	mapChipField_->LoadMapChipCsv("Resources/map.csv");
+
+	GenerateBlocks();
+
+	// デバッグカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
+}
+
+void GameScene::GenerateBlocks() {
 	// 要素数
-	const uint32_t kNumBlockVirtical = 10;
-	const uint32_t kNumBlockHorizontal = 20;
-	// ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	uint32_t kNumBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t kNumBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+	
 	// 要素数を変更する
 	worldTransformBlocks_.resize(kNumBlockVirtical);
-
 	// キューブの生成
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
 
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-			for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-				if (j % 2 == (i%2)) {
-					worldTransformBlocks_[i][j] = new WorldTransform();
-					worldTransformBlocks_[i][j]->Initialize();
-					worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-					worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
-				} else {
-					worldTransformBlocks_[i][j] = nullptr;
-				}
+		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
+			if (mapChipField_->GetMapChipTypeByIndex(j,i) ==MapChipType::kBlock) {
+				WorldTransform* worldTransform = new WorldTransform();
+				worldTransform->Initialize();
+				worldTransformBlocks_[i][j] = worldTransform;
+				worldTransformBlocks_[i][j]->translation_ = mapChipField_->GetMapChipPositionByIndex(j, i);
+			
 			}
+		}
 	}
-
-	// デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1280,720);
-	modelSkydome_=Model::CreateFromOBJ("sphere",true);
-	
-	skydome_= new Skydome();
-	skydome_->Initialize(modelSkydome_,&viewProjection_);
 }
 
 void GameScene::Update() {
@@ -104,6 +113,8 @@ void GameScene::Update() {
 
 	// 自キャラの更新
 	player_->Update();
+
+	//skydome更新
 	skydome_->Update();
 
 	// 縦横ブロック更新
@@ -117,7 +128,6 @@ void GameScene::Update() {
 		}
 	}
 }
-
 
 void GameScene::Draw() {
 
@@ -146,12 +156,12 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	// 3Dモデル描画
-//	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
-	// 自キャラの描画
-//	player_->Draw();
+	//	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	skydome_->Draw();
+	// 自キャラの描画
+	//	player_->Draw();
 
-	//縦横ブロック描画
+	// 縦横ブロック描画
 	for (std::vector<WorldTransform*> worldTransformBlockTate : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlockYoko : worldTransformBlockTate) {
 			if (!worldTransformBlockYoko)
@@ -175,6 +185,6 @@ void GameScene::Draw() {
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
-	
+
 #pragma endregion
 }
