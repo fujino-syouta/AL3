@@ -28,7 +28,8 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
-
+	const Vector3& GetVelocity() const {return velocity_;}
+	const WorldTransform& GetWorldTransform () const {return worldTransform_ ;}
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -66,4 +67,6 @@ private:
 	static inline const float kLimitFallSpeed = 0.2f;
 	// ジャンプ初速（上方向）
 	static inline const float kJumpAcceleration = 0.7f;
+
+	
 };

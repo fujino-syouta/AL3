@@ -65,8 +65,13 @@ void GameScene::Initialize() {
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
 
+	cameraController =new CameraController;
+	cameraController->Initialize();
+	cameraController->SetTarget(player_);
+	cameraController->Reset();
 
-	
+	CameraController::Rect cameraArea ={12.0f,100 - 12.0f,6.0f,6.0f};
+	cameraController->SetMovableArea(cameraArea);
 }
 
 void GameScene::GenerateBlocks() {
@@ -114,12 +119,15 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
+		viewProjection_.matView=cameraController->GetViewProjection().matView;
+		viewProjection_.matProjection=cameraController->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
+		viewProjection_.TransferMatrix();
 	}
 
 	// 自キャラの更新
 	player_->Update();
+	cameraController->Update();
 
 	//skydome更新
 	skydome_->Update();
