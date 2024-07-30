@@ -1,26 +1,44 @@
+#pragma once
+
+#include <vector>
+
+#include "Audio.h"
+#include "CameraController.h"
+#include "DebugCamera.h"
+#include "DirectXCommon.h"
+#include "Input.h"
+#include "MapChipField.h"
 #include "Model.h"
+#include "Player.h"
+#include "Skydome.h"
+#include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 
+
 /// <summary>
-/// 自キャラ
+/// ゲームシーン
 /// </summary>
-class Player {
-public:
-	// 左右
-	enum class LRDirection {
-		kRight,
-		kLeft,
-	};
+class GameScene {
+
+public: // メンバ関数
+	/// <summary>
+	/// コンストクラタ
+	/// </summary>
+	GameScene();
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~GameScene();
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
-//	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection);
-	void Initialize(const Vector3& position, ViewProjection *viewProjection);
+	void Initialize();
 
 	/// <summary>
-	/// 更新
+	/// 毎フレーム処理
 	/// </summary>
 	void Update();
 
@@ -28,45 +46,46 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
-	const Vector3& GetVelocity() const {return velocity_;}
-	const WorldTransform& GetWorldTransform () const {return worldTransform_ ;}
-private:
-	// ワールド変換データ
-	WorldTransform worldTransform_;
-	// モデル
-	Model* model_ = nullptr;
+
+	void GenerateBlocks();
+
+private: // メンバ変数
+	DirectXCommon* dxCommon_ = nullptr;
+	Input* input_ = nullptr;
+	Audio* audio_ = nullptr;
+
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 	// テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
+	uint32_t textureHandle_ = 0;
+	// 3Dモデル
+	Model* model_ = nullptr;
+	Model* modelBlock_ = nullptr;
+	Model* modelPlayer_ = nullptr;
+	// ワールドトランスフォーム
+	WorldTransform worldTransform_;
+	// ビュープロジェクション
+	ViewProjection viewProjection_;
 
-	ViewProjection* viewProjection_ = nullptr;
+	// 自キャラ
+	Player* player_ = nullptr;
 
-	Vector3 velocity_ = {};
+	// 縦横ブロック配列
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
-	static inline const float kAcceleration = 0.01f;
-	static inline const float kAttenuation = 0.01f;
-	static inline const float kLimitRunSpeed = 2.0f;
+	// デバッグカメラ有効
+	bool isDebugCameraActive_ = false;
+	// デバッグカメラ
+	DebugCamera* debugCamera_ = nullptr;
 
-	LRDirection lrDirection_ = LRDirection::kRight;
+	// 天球
+	Skydome* skydome_ = nullptr;
+	// 3Dモデル
+	Model* modelSkydome_ = nullptr;
 
-	// 旋回開始時の角度
-	float turnFirstRotationY_ = 0.0f;
-	// 旋回タイマー
-	float turnTimer_ = 0.0f;
+	// マップチップフィールド
+	MapChipField* mapChipField_ = nullptr;
 
-	// 旋回時間<秒>
-	static inline const float kTimeTurn = 0.3f;
-
-	// 接地状態フラグ
-	bool onGround_ = true;
-	// 着地フラグ
-	bool landing = false;
-
-	// 重力加速度（下方向）
-	static inline const float kGravityAcceleration = 0.05f;
-	// 最大落下速度（下方向）
-	static inline const float kLimitFallSpeed = 0.2f;
-	// ジャンプ初速（上方向）
-	static inline const float kJumpAcceleration = 0.7f;
-
-	
+	CameraController* cameraController = nullptr;
 };
