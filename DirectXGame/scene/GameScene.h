@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <vector>
@@ -15,6 +14,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Enemy.h"
 
 
 /// <summary>
@@ -64,6 +64,7 @@ private: // メンバ変数
 	Model* model_ = nullptr;
 	Model* modelBlock_ = nullptr;
 	Model* modelPlayer_ = nullptr;
+	Model* modelEnemy_ = nullptr;
 	// ワールドトランスフォーム
 	WorldTransform worldTransform_;
 	// ビュープロジェクション
@@ -89,4 +90,7 @@ private: // メンバ変数
 	MapChipField* mapChipField_ = nullptr;
 
 	CameraController* cameraController = nullptr;
+
+	//敵
+	Enemy* enemy_ = nullptr;
 };
