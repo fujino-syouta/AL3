@@ -1,7 +1,7 @@
 #include "Audio.h"
 #include "AxisIndicator.h"
 #include "DirectXCommon.h"
-#include "GameScene.h"
+#include "GameScene.h"ssss
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	win->CreateGameWindow(L"GC2D_09_フジノ_ショウタ_AL3");
 
 	// DirectX初期化処理
-	dxCommon = DirectXCommon::GetInstance();
+	dxCommon =  DirectXCommon::GetInstance();
 	dxCommon->Initialize(win);
 
 #pragma region 汎用機能初期化
