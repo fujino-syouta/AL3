@@ -1,8 +1,9 @@
 #include "GameScene.h"
-#include "TextureManager.h"
 #include "myMath.h"
+#include "TextureManager.h"
 #include <cassert>
 #include <cstdint>
+
 
 GameScene::GameScene() {}
 
@@ -107,8 +108,11 @@ void GameScene::Update() {
 		UpdateBlocks();
 
 		CheckAllCollisions();
-
+		break;
 	case Phase::kDeath:
+		if (deathParticles_ && deathParticles_->IsFinished()) {
+			finished_ = true;
+		}
 		worldTransformSkydome_.UpdateMatrix();
 
 		for (Enemy* enemy : enemies_) {
@@ -123,6 +127,7 @@ void GameScene::Update() {
 		break;
 	}
 }
+
 
 void GameScene::Draw() {
 	// コマンドリストの取得
@@ -166,13 +171,18 @@ void GameScene::Draw() {
 		player_->Draw();
 	}
 
+	//敵
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
 
+	//パーティクル
 	if (deathParticles_) {
 		deathParticles_->Draw();
 	}
+
+
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

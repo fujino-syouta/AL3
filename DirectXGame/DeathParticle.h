@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Model.h"
 #include "ViewProjection.h"
@@ -14,6 +14,8 @@ public:
 
 	void Draw();
 
+	bool IsFinished() const { return isFinished_; };
+
 private:
 	static inline const uint32_t kNumParticles = 8;
 	static inline const float kDuration = 2.0f;
@@ -27,6 +29,4 @@ private:
 	float counter_ = 0.0f;
 	//ObjectColor objectColor_;
 	//Vector4 color_;
-
-	
 };

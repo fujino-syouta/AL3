@@ -7,8 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXGame", "DirectXGame.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{B5CBC2CC-7535-4F67-8E4C-948B4F019C23}"
 	ProjectSection(SolutionItems) = preProject
-		DeathParticle.h = DeathParticle.h
 		DeathParticle.cpp = DeathParticle.cpp
+		DeathParticle.h = DeathParticle.h
+		TitleScene.cpp = TitleScene.cpp
+		TitleScene.h = TitleScene.h
 	EndProjectSection
 EndProject
 Global
