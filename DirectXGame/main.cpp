@@ -20,10 +20,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"GC2D_09_フジノ_ショウタ_AL3");
+	win->CreateGameWindow(L"GC2C_09_フジノ_ショウタ_AL3");
 
 	// DirectX初期化処理
-	dxCommon =  DirectXCommon::GetInstance();
+	dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize(win);
 
 #pragma region 汎用機能初期化
@@ -94,9 +94,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	// 各種解放
-	delete gameScene;
-	// 3Dモデル解放
-	Model::StaticFinalize();
+	SafeDelete(gameScene);
 	audio->Finalize();
 	// ImGui解放
 	imguiManager->Finalize();

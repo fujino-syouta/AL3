@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include <cassert>
 
-GameScene::GameScene() {}
+GameScene::GameScene() { delete model_; }
 
 GameScene::~GameScene() {}
 
@@ -11,6 +11,8 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+	model_ = Model::Create();
+
 }
 
 void GameScene::Update() {}
@@ -55,7 +57,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// スプライト描画後処理
-	Sprite::PostDraw( );
+	Sprite::PostDraw();
 
 #pragma endregion
 }
